@@ -31,12 +31,15 @@ def bfs(graph, start, end):
     while queue:
         node, path = queue.popleft()
         if node == end:
-            return path
+            print(len(queue))
+            print(len(visited))
+            return path, visited
         for neighbor in graph[node]:
             if neighbor not in visited:
                 visited.add(neighbor)
                 queue.append((neighbor, path + [neighbor]))
-    return None
+    
+    return None, visited
 
 def mark_explored(grid, explored):
     for node in explored:
@@ -57,7 +60,7 @@ def print_grid(grid):
         print(''.join(row))
 
 # File containing the grid data
-filename = "breadthFirstPath.txt"
+filename = "pathFindingMap.txt"
 
 # Read the grid from the file
 grid = read_grid_from_file(filename)
@@ -84,16 +87,13 @@ path = bfs(graph, start, end)
 
 if path:
     # Mark the explored spots during BFS
-    explored = set()
-    for _, nodes in graph.items():
-        for node in nodes:
-            if node not in path:
-                explored.add(node)
+    explored = path[1]
     # Mark explored spots
     grid = mark_explored(grid, explored)
     # Mark the path found with asterisks
-    grid = mark_path(grid, path)
+    grid = mark_path(grid, path[0])
     # Print the updated grid
     print_grid(grid)
+    print(len(path[0]))
 else:
     print("No path found!")
